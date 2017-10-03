@@ -1,0 +1,33 @@
+<h2><%= @post.title %></h2>by: <%= @post.author.username %>
+<%= @post.url %>
+<%= @post.content %>
+
+<h3>Subs</h3>
+<% @post.subs.each do |subby| %>
+  <ul>
+    <li><%= link_to subby.title, sub_url(subby) %></li>
+  </ul>
+<% end %>
+
+<h3>Add Comment</h3>
+
+<form action=" <%= post_comments_url(@post) %>" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token  %>">
+  <textarea name="comment[content]" rows="8" cols="80"></textarea>
+  <br>
+  <input type="submit" name="" value="Submit Comment">
+</form>
+<br>
+<h1>Comments</h1>
+
+<% @post.comments.each do |c| %>
+  <ul>
+  <li><%= link_to c.content, comment_url(c) %></li>
+  <% child_comments(c).each do |ch| %>
+    <%= ch.content %>
+    <%= link_to c.content, comment_url(c) %> <br>
+  </ul>
+  <% end %>
+<% end %>
+<br>
+<a href="<%= edit_post_url(@post) %>">Edit Post</a>
